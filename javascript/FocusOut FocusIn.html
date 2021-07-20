@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<title>FocusOut FocusIn by KHA</title>
+<body>
+
+<p>"focusout" event and "focusin" event attached to an input element.</p>
+
+<p>Write yyyyMM in the textbox</p>
+
+Year Month: <input type = "text" id = "date1" maxlength = "7">
+
+<script>
+document.getElementById("date1").addEventListener("focusout", focusOutDateFormat);
+document.getElementById("date1").addEventListener("focusin", focusInDateFormat);
+
+function focusOutDateFormat() {
+	let x = document.getElementById("date1");
+	if (!isNaN(x.value) && x.value.length == 6) {
+	  let year = x.value.substring(0, 4);
+	  let month = x.value.substring(4);
+	  x.value = year + '/' + month;
+	}
+}
+
+function focusInDateFormat() {
+	let x = document.getElementById("date1");
+	const pattern = /\d\d\d\d[/]\d\d/;
+	if (pattern.test(x.value)) {
+		let year = x.value.substring(0, 4);
+		let month = x.value.substring(5);
+		x.value = year + month;
+	}
+}
+</script>
+
+</body>
+</html>

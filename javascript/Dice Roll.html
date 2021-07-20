@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+	table, th, td {
+		border: 1px solid black;
+		border-collapse: collapse;
+	}
+	th, td {
+		padding: 15px;
+	}
+	#rollbutton {background-color:#f55d5d;}
+	#rollbutton:hover {background-color:#cf9898;}
+	</style>
+</head>
+<title>Rolling dice by KHA</title>
+<body>
+
+<div id = "title" style = "background-color: rgb(186, 230, 173);">
+	<h1 style = "color: red">Rolling dice and win your day.</h1>
+</div>
+
+<div id = "userinput" style = "background-color: rgb(230, 215, 173);">
+	<br /><br />
+	Stake: <input type = "text" id = "txtstake" value = "0">
+	
+	<br /><br />
+	<table>
+		<tr>
+			<td>
+				<label for = "lt7">&lt;7 (2x)</label>
+				<input type = "radio" name="result" value = "1" id = "lt7" checked>
+			</td>
+			<td id = "rollbutton" rowspan="3" onclick = "rollDice()">
+				<h3>Roll</h3>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for = "eq7">7 (7x)</label>
+				<input type = "radio" name="result" value = "2" id = "eq7">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for = "gt7">&gt;7 (2x)</label>
+				<input type = "radio" name="result" value = "3" id = "gt7">
+			</td>
+		</tr>
+	</table>
+	<br /><br />
+</div>
+<br />
+<div id = "showresult">
+	<br />
+	<p id = "dice1"></p>
+	<p id = "dice2"></p>
+	<p id = "diceTotal"></p>
+	<p id = "winorlose"></p>
+	<br />
+</div>
+<script>
+function rollDice() {
+	let stake = document.getElementById("txtstake").value;
+	
+	const rbs = document.querySelectorAll('input[name="result"]');
+    let selectedValue;
+	for (const rb of rbs) {
+		if (rb.checked) {
+			selectedValue = rb.value;
+			break;
+		}
+	}
+
+	let dice1_result = getRandomIntInclusive(1, 6);
+	let dice2_result = getRandomIntInclusive(1, 6);
+	let dice_total = dice1_result + dice2_result;
+
+	let odds = 1;
+	let win_or_lose = false;
+	let winning_amt = (0).toFixed(2);
+
+	//Check the user choice and get respective odds
+	switch (selectedValue) {
+		case '1':
+			odds = 2;
+			if (dice_total < 7) {
+				win_or_lose = true;
+			}
+			break;
+		case '2':
+			odds = 7;
+			if (dice_total == 7) {
+				win_or_lose = true;
+			}
+			break;
+		case '3':
+			odds = 2;
+			if (dice_total > 7) {
+				win_or_lose = true;
+			}
+	}
+	
+	//Dice result
+	document.getElementById("dice1").innerHTML = "Dice 1 = " + dice1_result;
+	document.getElementById("dice2").innerHTML = "Dice 2 = " + dice2_result;
+	document.getElementById("diceTotal").innerHTML = "Total = " + dice_total;
+
+	//win or lose
+	document.getElementById("showresult").setAttribute("style", "background-color: lightblue;");
+	if (win_or_lose == true) {
+		winning_amt = (stake * odds).toFixed(2);
+		document.getElementById("winorlose").setAttribute("style", "color: green;");
+		document.getElementById("winorlose").innerHTML = "<b> You win " + winning_amt + ". </b>";
+	} else {
+		document.getElementById("winorlose").setAttribute("style", "color: red;");
+		document.getElementById("winorlose").innerHTML = "<b> You lose. </b>";
+	}	
+}
+
+//Get random numbers inclusive
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+
+  //The maximum is inclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min + 1) + min); 
+}
+</script>
+</body>
+</html>
