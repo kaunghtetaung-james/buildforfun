@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<title>Roulette Racetrack Statistics by KHA</title>
+<head>
+	<style>
+	table, th, td {
+		border: 1px solid yellow;
+		border-collapse: collapse;
+		
+	}
+	th, td {
+		padding: 15px;
+	}
+	.red_number {background-color:red; color: white}
+	.red_number:hover {background-color:#cf9898;}
+	.black_number {background-color:black; color: white}
+	.black_number:hover {background-color:#cf9898;}
+	.green_number {background-color:green; color: white}
+	.green_number:hover {background-color:#cf9898;}
+	.black_header {background-color:black; color: white}
+	</style>
+</head>
+<body>
+<h1>Roulette Racetrack Statistics</h1>
+<h4>URL: https://lite-1x2192009.top/en/casino?subcategory=5</h4>
+<div>
+	<img src="roulette-racetrack.jpg" width = "50%" height="50%"></img>
+</div>
+<div style = "padding-left: 40px;">
+<table>
+	<tr>
+		<td rowspan = "3" class = "green_number" onclick = "calculate(0)">0</td>
+		<td class = "red_number" onclick = "calculate(3)">3</td>
+		<td class = "black_number" onclick = "calculate(6)">6</td>
+		<td class = "red_number" onclick = "calculate(9)">9</td>
+		<td class = "red_number" onclick = "calculate(12)">12</td>
+		<td class = "black_number" onclick = "calculate(15)">15</td>
+		<td class = "red_number" onclick = "calculate(18)">18</td>
+		<td class = "red_number" onclick = "calculate(21)">21</td>
+		<td class = "black_number" onclick = "calculate(24)">24</td>
+		<td class = "red_number" onclick = "calculate(27)">27</td>
+		<td class = "red_number" onclick = "calculate(30)">30</td>
+		<td class = "black_number" onclick = "calculate(33)">33</td>
+		<td class = "red_number" onclick = "calculate(36)">36</td>
+	</tr>
+	<tr>
+		<td class = "black_number" onclick = "calculate(2)">2</td>
+		<td class = "red_number" onclick = "calculate(5)">5</td>
+		<td class = "black_number" onclick = "calculate(8)">8</td>
+		<td class = "black_number" onclick = "calculate(11)">11</td>
+		<td class = "red_number" onclick = "calculate(14)">14</td>
+		<td class = "black_number" onclick = "calculate(17)">17</td>
+		<td class = "black_number" onclick = "calculate(20)">20</td>
+		<td class = "red_number" onclick = "calculate(23)">23</td>
+		<td class = "black_number" onclick = "calculate(26)">26</td>
+		<td class = "black_number" onclick = "calculate(29)">29</td>
+		<td class = "red_number" onclick = "calculate(32)">32</td>
+		<td class = "black_number" onclick = "calculate(35)">35</td>
+	</tr>
+	<tr>
+		<td class = "red_number" onclick = "calculate(1)">1</td>
+		<td class = "black_number" onclick = "calculate(4)">4</td>
+		<td class = "red_number" onclick = "calculate(7)">7</td>
+		<td class = "black_number" onclick = "calculate(10)">10</td>
+		<td class = "black_number" onclick = "calculate(13)">13</td>
+		<td class = "red_number" onclick = "calculate(16)">16</td>
+		<td class = "red_number" onclick = "calculate(19)">19</td>
+		<td class = "black_number" onclick = "calculate(22)">22</td>
+		<td class = "red_number" onclick = "calculate(25)">25</td>
+		<td class = "black_number" onclick = "calculate(28)">28</td>
+		<td class = "black_number" onclick = "calculate(31)">31</td>
+		<td class = "red_number" onclick = "calculate(34)">34</td>
+	</tr>
+</table>
+</div>
+
+<br /><br />
+How many numbers: <input type = "text" id = "txtNumCnt">
+<button onclick="getRandomNumbers()">Generate random numbers</button>
+
+<br />
+<p id="randomNumbers"></p>
+<p id="mostDrawnNumbers"></p>
+<p>
+<table id="racetrack_table">
+</table>
+</p>
+<script>
+let number_cnt = 0;
+let number_row_id = "racetrack_row_id_";
+let table_array = []; 
+
+let racetrack_array = new Array(4);
+
+let roulette_numbers = 37;
+let roulette_array = new Array(roulette_numbers);
+initData();
+
+//initialization
+function initData() {
+	// Loop to create 2D array using 1D array with length 2.
+	for (var i = 0; i < roulette_array.length; i++) {
+		roulette_array[i] = new Array(2);
+	}
+	//count data initialization
+	for (var i = 0; i < racetrack_array.length; i++) {
+		racetrack_array[i] = 0;
+	}
+
+	//data initialization for roulette racetrack
+
+	//1 = zero
+	//2 = voisins
+	//3 = orphelins
+	//4 = tiers
+
+	//zero
+	roulette_array[0][0] = 0;
+	roulette_array[0][1] = 1;
+
+	roulette_array[1][0] = 32;
+	roulette_array[1][1] = 1;
+
+	//voisins
+	roulette_array[2][0] = 15;
+	roulette_array[2][1] = 2;
+
+	roulette_array[3][0] = 19;
+	roulette_array[3][1] = 2;
+
+	roulette_array[4][0] = 4;
+	roulette_array[4][1] = 2;
+
+	roulette_array[5][0] = 21;
+	roulette_array[5][1] = 2;
+
+	roulette_array[6][0] = 2;
+	roulette_array[6][1] = 2;
+
+	roulette_array[7][0] = 25;
+	roulette_array[7][1] = 2;
+
+	//orphelins
+	roulette_array[8][0] = 17;
+	roulette_array[8][1] = 3;
+
+	roulette_array[9][0] = 34;
+	roulette_array[9][1] = 3;	
+
+	roulette_array[10][0] = 6;
+	roulette_array[10][1] = 3;
+
+	//tiers
+	roulette_array[11][0] = 27;
+	roulette_array[11][1] = 4;
+
+	roulette_array[12][0] = 13;
+	roulette_array[12][1] = 4;
+
+	roulette_array[13][0] = 36;
+	roulette_array[13][1] = 4;
+
+	roulette_array[14][0] = 11;
+	roulette_array[14][1] = 4;
+
+	roulette_array[15][0] = 30;
+	roulette_array[15][1] = 4;
+
+	roulette_array[16][0] = 8;
+	roulette_array[16][1] = 4;
+
+	roulette_array[17][0] = 23;
+	roulette_array[17][1] = 4;
+
+	roulette_array[18][0] = 10;
+	roulette_array[18][1] = 4;
+
+	roulette_array[19][0] = 5;
+	roulette_array[19][1] = 4;
+
+	roulette_array[20][0] = 24;
+	roulette_array[20][1] = 4;
+
+	roulette_array[21][0] = 16;
+	roulette_array[21][1] = 4;
+
+	roulette_array[22][0] = 33;
+	roulette_array[22][1] = 4;
+
+	//orphelins
+	roulette_array[23][0] = 1;
+	roulette_array[23][1] = 3;
+
+	roulette_array[24][0] = 20;
+	roulette_array[24][1] = 3;
+
+	roulette_array[25][0] = 14;
+	roulette_array[25][1] = 3;
+
+	roulette_array[26][0] = 31;
+	roulette_array[26][1] = 3;
+
+	roulette_array[27][0] = 9;
+	roulette_array[27][1] = 3;
+
+	//voisins
+	roulette_array[28][0] = 22;
+	roulette_array[28][1] = 2;
+
+	roulette_array[29][0] = 18;
+	roulette_array[29][1] = 2;
+
+	roulette_array[30][0] = 29;
+	roulette_array[30][1] = 2;
+
+	roulette_array[31][0] = 7;
+	roulette_array[31][1] = 2;
+
+	roulette_array[32][0] = 28;
+	roulette_array[32][1] = 2;
+
+	roulette_array[33][0] = 12;
+	roulette_array[33][1] = 2;
+
+	//zero
+	roulette_array[34][0] = 35;
+	roulette_array[34][1] = 1;
+
+	roulette_array[35][0] = 3;
+	roulette_array[35][1] = 1;
+
+	roulette_array[36][0] = 26;
+	roulette_array[36][1] = 1;
+}
+
+function calculate(lucky_number) {
+	let track_category = "Zero";
+	for (var i = 0; i < roulette_array.length; i++) {
+		if (lucky_number == roulette_array[i][0]) {
+			if (roulette_array[i][1] === 1) {
+				racetrack_array[0]++;
+			} else if (roulette_array[i][1] === 2) {
+				racetrack_array[1]++;
+				track_category = "Voisins";
+			} else if (roulette_array[i][1] === 3) {
+				racetrack_array[2]++;
+				track_category = "Orphelins";
+			} else if (roulette_array[i][1] === 4) {
+				racetrack_array[3]++;
+				track_category = "Tiers";
+			}
+			number_cnt++;
+			continue;
+		}
+	}
+
+	document.getElementById("mostDrawnNumbers").innerHTML = "Zero: " + racetrack_array[0]
+	+"<br />Voisins: " + racetrack_array[1]
+	+"<br />Orphelins: " + racetrack_array[2]
+	+"<br />Tiers: " + racetrack_array[3];
+	
+	//add at the front
+	let row_str = "<tr id = '" + number_row_id + number_cnt + "'>"
+			+ "<td>" + lucky_number + "</td>"
+			+ "<td>" + track_category + "</td>"
+			+ "<td class = 'red_number' onclick='deleteRow(" + number_cnt + ")'>Delete</td>"
+		+ "</tr>"
+	table_array.unshift(row_str);
+	
+	//table headers
+	row_str = "<tr>"
+		+ "<th class = 'black_header'>Lucky Number</th>"
+		+ "<th class = 'black_header'>Category</th>"
+		+ "<th class = 'black_header'>Action</th>"
+		+ "</tr>";
+	
+	//table content rows
+	for (row in table_array) {
+		row_str += table_array[row];
+	}
+	document.getElementById("racetrack_table").innerHTML = row_str;
+
+}
+
+function deleteRow(rowNo) {
+	document.getElementById(number_row_id + rowNo).remove(); //delete the specified row
+}
+
+function getRandomNumbers() {
+	//get the number count
+	let number_cnt = document.getElementById("txtNumCnt").value;
+	
+	//array to store random numbers
+	let number_array = []; 
+	
+	//loop the array, check if the number already generated,
+	//if not, put it in the array
+	for (var i = 0; i < number_cnt; i++) {
+		var randomNumber = getRandomIntInclusive(0, 36);
+		if (!number_array.includes(randomNumber)) {
+			number_array.push(randomNumber);
+		}
+		else {
+			i--;
+		}
+	}
+	number_array.sort();
+	
+	let str1 = "<h3>Random numbers</h3>";
+	let str2 = "";
+
+	for (var element of number_array) {
+		//check if it is not the first element
+		if(!isEmptyOrSpaces(str2)) {
+			str2 += "<br />";
+		}
+		str2 += element;
+	}
+
+	document.getElementById("randomNumbers").innerHTML = str1 + str2;
+}
+
+//Get random numbers inclusive
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+
+  //The maximum is inclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min + 1) + min); 
+}
+
+//check if string is empty or not
+function isEmptyOrSpaces(str){
+    return str === null || str.match(/^ *$/) !== null;
+}
+</script>
+</body>
+</html>
